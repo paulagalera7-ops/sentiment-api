@@ -1,20 +1,24 @@
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
-    
-    text = data['queryResult']['queryText']
+
+    # 🔥 Manejo correcto para Dialogflow + pruebas manuales
+    if 'queryResult' in data:
+        text = data['queryResult']['queryText']
+    elif 'text' in data:
+        text = data['text']
+    else:
+        return jsonify({"error": "No text provided"}), 400
 
     text_vec = vectorizer.transform([text])
     prediction = model.predict(text_vec)[0]
 
     if prediction == "negative":
-        response = "😔 Lamentamos mucho su mala experiencia. Para solucionarlo puedo ayudarte ahora mismo mediante chat o derivarte a un agente humano. ¿Qué prefieres?"
-
+        response = "😔 Lamento mucho tu experiencia. ¿Como puedo ayudarte?"
     elif prediction == "positive":
-        response = "😊 ¡Nos alegra escuchar eso! ¿Te gustaría ver más opciones similares en otras fecha o recomendaciones para ti en otra ciudades"
-
+        response = "😊 ¡Qué bueno escuchar eso!"
     else:
-        response = "🙂 Gracias por tu comentario. ¿Hay algo más en lo que te pueda ayudar?"
+        response = "🙂 Gracias por tu comentario positivo. Nos alegra que sigas contando con nuestros servicios en el futuro "
 
     return jsonify({
         "fulfillmentText": response
