@@ -8,13 +8,13 @@ def predict():
     prediction = model.predict(text_vec)[0]
 
     if prediction == "negative":
-        response = "😔 Lamento mucho tu experiencia. Puedo ayudarte ahora mismo o derivarte a un agente humano. ¿Qué prefieres?"
+        response = "😔 Lamentamos mucho tu mala experiencia. Para solucionarlo puedo ayudarte ahora mismo mediante chat o derivarte a un agente humano. ¿Qué prefieres?"
 
     elif prediction == "positive":
-        response = "😊 ¡Qué bueno escuchar eso! ¿Te gustaría ver más opciones o recomendaciones similares?"
+        response = "😊 ¡Nos alegra escuchar eso! ¿Te gustaría ver más opciones similares en otras fecha o recomendaciones para ti en otra ciudades"
 
     else:
-        response = "🙂 Gracias por tu comentario. ¿Hay algo específico en lo que te pueda ayudar?"
+        response = "🙂 Gracias por tu comentario. ¿Hay algo más en lo que te pueda ayudar?"
 
     return jsonify({
         "fulfillmentText": response
