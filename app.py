@@ -30,7 +30,7 @@ print("PREDICCIÓN:", prediction)
     if prediction == "negative":
         response = "Desde Booking lamentamos lo que nos comentas, para ofrecerte una rápida solucion te pondremos en contacto con un agente humano"
     elif prediction == "positive":
-        response = "Nos alegra mucho que hayas tenida una muy buena experiencia, a continuacion te ofrecemos un descuenti para alquiler de coche en tu próxima escapada "
+        response = "Nos alegra mucho que hayas tenida una muy buena experiencia, a continuacion te ofrecemos un descuento para alquiler de coche en tu próxima escapada "
     else:
         response = "Gracias por tu comentario, nos alegra contar con tu opinión siempre."
 
