@@ -1,19 +1,23 @@
 from flask import Flask, request, jsonify
 import joblib
+import os
+from googletrans import Translator
 
 app = Flask(__name__)
 
-import os
-
+# Cargar modelo y vectorizador
 base_path = os.path.dirname(__file__)
-
 model = joblib.load(os.path.join(base_path, 'sentiment_model.pkl'))
 vectorizer = joblib.load(os.path.join(base_path, 'vectorizer.pkl'))
+
+# Traductor
+translator = Translator()
 
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
 
+    # Obtener texto (Dialogflow o prueba manual)
     if 'queryResult' in data:
         text = data['queryResult']['queryText']
     elif 'text' in data:
@@ -21,28 +25,28 @@ def predict():
     else:
         return jsonify({"error": "No text provided"}), 400
 
-   from googletrans import Translator
+    # 🔥 TRADUCIR A INGLÉS (CLAVE)
+    translated = translator.translate(text, dest='en').text
 
-translator = Translator()
+    # Debug (opcional pero útil)
+    print("TEXTO ORIGINAL:", text)
+    print("TRADUCIDO:", translated)
 
+    # Vectorizar y predecir
+    text_vec = vectorizer.transform([translated])
+    prediction = model.predict(text_vec)[0]
 
-translated = translator.translate(text, dest='en').text
+    print("PREDICCIÓN:", prediction)
 
-print("TEXTO ORIGINAL:", text)
-print("TRADUCIDO:", translated)
-
-
-text_vec = vectorizer.transform([translated])
-prediction = model.predict(text_vec)[0]
-
-print("PREDICCIÓN:", prediction)
-
+    # Respuestas según sentimiento
     if prediction.lower() == "negative":
-        response = "Desde Booking lamentamos lo que nos comentas, para ofrecerte una rápida solucion te pondremos en contacto con un agente humano"
-    elif prediction == "positive":
-        response = "Nos alegra mucho que hayas tenida una muy buena experiencia, a continuacion te ofrecemos un descuento para alquiler de coche en tu próxima escapada "
+        response = "Lamentamos lo ocurrido. Vamos a derivarte con un agente humano para ayudarte lo antes posible."
+    
+    elif prediction.lower() == "positive":
+        response = "Nos alegra mucho tu experiencia. Podemos ofrecerte un descuento en tu próxima reserva."
+    
     else:
-        response = "Gracias por tu comentario, nos alegra contar con tu opinión siempre."
+        response = "Gracias por tu comentario. Si necesitas algo más, aquí estamos para ayudarte."
 
     return jsonify({
         "fulfillmentText": response
