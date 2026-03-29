@@ -1,8 +1,16 @@
+from flask import Flask, request, jsonify
+import joblib
+
+app = Flask(__name__)
+
+# Cargar modelo
+model = joblib.load('sentiment_model.pkl')
+vectorizer = joblib.load('vectorizer.pkl')
+
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
 
-    # 🔥 Manejo correcto para Dialogflow + pruebas manuales
     if 'queryResult' in data:
         text = data['queryResult']['queryText']
     elif 'text' in data:
@@ -14,12 +22,16 @@ def predict():
     prediction = model.predict(text_vec)[0]
 
     if prediction == "negative":
-        response = "😔 Lamento mucho tu experiencia. ¿Como puedo ayudarte?"
+        response = "Lamento mucho tu experiencia. ¿Quieres ayuda?"
     elif prediction == "positive":
-        response = "😊 ¡Qué bueno escuchar eso!"
+        response = "Qué bueno escuchar eso. ¿Te ayudo con algo más?"
     else:
-        response = "🙂 Gracias por tu comentario positivo. Nos alegra que sigas contando con nuestros servicios en el futuro "
+        response = "Gracias por tu comentario."
 
     return jsonify({
         "fulfillmentText": response
     })
+
+@app.route('/')
+def home():
+    return "API funcionando"
