@@ -21,8 +21,11 @@ def predict():
     else:
         return jsonify({"error": "No text provided"}), 400
 
-    text_vec = vectorizer.transform([text])
-    prediction = model.predict(text_vec)[0]
+   text_vec = vectorizer.transform([text])
+prediction = model.predict(text_vec)[0]
+
+print("TEXTO RECIBIDO:", text)
+print("PREDICCIÓN:", prediction)
 
     if prediction == "negative":
         response = "Desde Booking lamentamos lo que nos comentas, para ofrecerte una rápida solucion te pondremos en contacto con un agente humano"
