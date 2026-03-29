@@ -3,9 +3,12 @@ import joblib
 
 app = Flask(__name__)
 
-# Cargar modelo
-model = joblib.load('sentiment_model.pkl')
-vectorizer = joblib.load('vectorizer.pkl')
+import os
+
+base_path = os.path.dirname(__file__)
+
+model = joblib.load(os.path.join(base_path, 'sentiment_model.pkl'))
+vectorizer = joblib.load(os.path.join(base_path, 'vectorizer.pkl'))
 
 @app.route('/predict', methods=['POST'])
 def predict():
