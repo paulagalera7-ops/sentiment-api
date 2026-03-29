@@ -8,7 +8,7 @@ def predict():
     prediction = model.predict(text_vec)[0]
 
     if prediction == "negative":
-        response = "😔 Lamentamos mucho tu mala experiencia. Para solucionarlo puedo ayudarte ahora mismo mediante chat o derivarte a un agente humano. ¿Qué prefieres?"
+        response = "😔 Lamentamos mucho su mala experiencia. Para solucionarlo puedo ayudarte ahora mismo mediante chat o derivarte a un agente humano. ¿Qué prefieres?"
 
     elif prediction == "positive":
         response = "😊 ¡Nos alegra escuchar eso! ¿Te gustaría ver más opciones similares en otras fecha o recomendaciones para ti en otra ciudades"
