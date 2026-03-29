@@ -21,10 +21,20 @@ def predict():
     else:
         return jsonify({"error": "No text provided"}), 400
 
-   text_vec = vectorizer.transform([text])
+   from googletrans import Translator
+
+translator = Translator()
+
+
+translated = translator.translate(text, dest='en').text
+
+print("TEXTO ORIGINAL:", text)
+print("TRADUCIDO:", translated)
+
+
+text_vec = vectorizer.transform([translated])
 prediction = model.predict(text_vec)[0]
 
-print("TEXTO RECIBIDO:", text)
 print("PREDICCIÓN:", prediction)
 
     if prediction == "negative":
